@@ -27,6 +27,18 @@ class UserRepository
             $ret[$item->membership] = $item->total;
         }
 
+        if(!isset($ret['basic'])) {
+            $ret['basic'] = 0;
+        }
+
+        if(!isset($ret['pro'])) {
+            $ret['pro'] = 0;
+        }
+
+        if(!isset($ret['lifetime'])) {
+            $ret['lifetime'] = 0;
+        }
+
         return $ret;
     }
 
