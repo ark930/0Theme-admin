@@ -7,18 +7,18 @@
     <div class="widget stru" style="width: 50%">
         <h3>User Structure</h3>
         <div class="box">
-            <div class="score">105<span>Basic</span></div>
-            <div class="score">45<span>Pro</span></div>
-            <div class="score">15<span>Lifetime</span></div>
+            <div class="score">{{ $userMembership['basic'] }}<span>Basic</span></div>
+            <div class="score">{{ $userMembership['pro'] }}<span>Pro</span></div>
+            <div class="score">{{ $userMembership['lifetime'] }}<span>Lifetime</span></div>
         </div>
     </div>
     <div class="widget growth" style="width: 50%">
         <h3>User Growth</h3>
         <div class="box">
-            <div class="score">105<span>Today</span></div>
-            <div class="score">45<span>Monthly</span></div>
-            <div class="score">15<span>Yearly</span></div>
-            <div class="score">15<span>Total</span></div>
+            <div class="score">{{ $userGrowth['today'] }}<span>Today</span></div>
+            <div class="score">{{ $userGrowth['month'] }}<span>Monthly</span></div>
+            <div class="score">{{ $userGrowth['year'] }}<span>Yearly</span></div>
+            <div class="score">{{ $userGrowth['total'] }}<span>Total</span></div>
         </div>
     </div>
     <div class="widget earn" style="width: 33.333%">

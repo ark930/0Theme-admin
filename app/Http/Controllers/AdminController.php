@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\UserRepository;
+
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(UserRepository $userRepository)
     {
-        return view('dashboard');
+        $userMembership = $userRepository->userMembershipData();
+        $userGrowth = $userRepository->userGrowthData();
+
+        return view('dashboard', [
+            'userMembership' => $userMembership,
+            'userGrowth' => $userGrowth,
+        ]);
     }
 
     public function themes()
@@ -29,4 +37,19 @@ class AdminController extends Controller
         return view('settings');
     }
 
+    /**
+     * Uses info for users page
+     *
+     * @param UserRepository $userRepository
+     *
+     * @return array
+     */
+    public function userInfo(UserRepository $userRepository)
+    {
+        $userInfo = $userRepository->userInfo();
+
+        return [
+            'data' => $userInfo,
+        ];
+    }
 }
