@@ -44,6 +44,31 @@ class AdminController extends Controller
         return view('settings');
     }
 
+    public function userDetails()
+    {
+        return view('user_details');
+    }
+
+    public function newTheme()
+    {
+        return view('new_theme');
+    }
+
+    public function updateTheme()
+    {
+        return view('new_theme');
+    }
+
+    public function newThemeUpload()
+    {
+        return '';
+    }
+
+    public function upgradeThemeUpload()
+    {
+        return '';
+    }
+
     /**
      * Uses info for users page
      *

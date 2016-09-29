@@ -19,71 +19,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>
-                <a href="single-user.html">
-                    UserName
-                </a>
-            </td>
-            <td>contact@baohan.me</td>
-            <td>Basic</td>
-            <td>09 Nov 2017</td>
-            <td>3</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="single-user.html">
-                    UserName
-                </a>
-            </td>
-            <td>contact@baohan.me</td>
-            <td>Basic</td>
-            <td>09 Nov 2017</td>
-            <td>3</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="single-user.html">
-                    UserName
-                </a>
-            </td>
-            <td>contact@baohan.me</td>
-            <td>Basic</td>
-            <td>09 Nov 2017</td>
-            <td>3</td>
-        </tr><tr>
-            <td>
-                <a href="single-user.html">
-                    UserName
-                </a>
-            </td>
-            <td>contact@baohan.me</td>
-            <td>Basic</td>
-            <td>09 Nov 2017</td>
-            <td>3</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="single-user.html">
-                    UserName
-                </a>
-            </td>
-            <td>contact@baohan.me</td>
-            <td>Basic</td>
-            <td>09 Nov 2017</td>
-            <td>3</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="single-user.html">
-                    UserName
-                </a>
-            </td>
-            <td>contact@baohan.me</td>
-            <td>Basic</td>
-            <td>09 Nov 2017</td>
-            <td>3</td>
-        </tr>
+
         </tbody>
     </table>
 </div>
@@ -103,10 +39,11 @@
                     // `data` option, which defaults to the column being worked with, in
                     // this case `data: 0`.
                     "render": function ( data, type, row ) {
-                        return '<td><a href="single-user.html">' + data + '</a></td>';
+                        return '<td><a href="/user/' + row[5] + '">' + data + '</a></td>';
                     },
                     "targets": 0
-                }
+                },
+                { "visible": false,  "targets": [ 5 ] }
             ]
         });
     });

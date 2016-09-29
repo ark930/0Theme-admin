@@ -24,4 +24,10 @@ Route::get('/users', 'AdminController@users');
 Route::get('/finance', 'AdminController@finance');
 Route::get('/settings', 'AdminController@settings');
 
+Route::get('/user/{id}', 'AdminController@userDetails')->where('id', '[0-9]+');
+Route::get('/theme/new', 'AdminController@newTheme');
+Route::get('/theme/new/{id}', 'AdminController@updateTheme')->where('id', '[0-9]+');
+Route::post('/theme/new', 'AdminController@newThemeUpload');
+Route::patch('/theme/new/{id}', 'AdminController@upgradeThemeUpload')->where('id', '[0-9]+');
+
 Route::get('/user_info', 'AdminController@userInfo');

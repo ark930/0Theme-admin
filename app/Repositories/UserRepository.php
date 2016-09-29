@@ -64,6 +64,7 @@ class UserRepository
                 $user['membership'],
                 $user['register_at'],
                 1,
+                $user['id'],
             ];
         }
 
