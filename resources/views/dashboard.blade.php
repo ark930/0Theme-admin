@@ -73,26 +73,12 @@
         <h3>Theme Downloads</h3>
         <div class="box">
             <ul>
-                <li>
-                    <a href="">Themename</a>
-                    <p>Design<time>Downloads:30</time></p>
-                </li>
-                <li>
-                    <a href="">Themename</a>
-                    <p>Design<time>Downloads:30</time></p>
-                </li>
-                <li>
-                    <a href="">Themename</a>
-                    <p>Design<time>Downloads:30</time></p>
-                </li>
-                <li>
-                    <a href="">Themename</a>
-                    <p>Design<time>Downloads:30</time></p>
-                </li>
-                <li>
-                    <a href="">Themename</a>
-                    <p>Design<time>Downloads:30</time></p>
-                </li>
+                @foreach($themeDownloadInfo as $item)
+                    <li>
+                        <a href="">{{ $item['name'] }}</a>
+                        <p>Design<time>Downloads:{{ $item['total'] }}</time></p>
+                    </li>
+                @endforeach
                 <li>
                     <a href="">Themename</a>
                     <p>Design<time>Downloads:30</time></p>

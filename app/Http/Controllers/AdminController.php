@@ -7,14 +7,16 @@ use App\Repositories\UserRepository;
 
 class AdminController extends Controller
 {
-    public function dashboard(UserRepository $userRepository)
+    public function dashboard(UserRepository $userRepository, ThemeRepository $themeRepository)
     {
         $userMembership = $userRepository->userMembershipData();
         $userGrowth = $userRepository->userGrowthData();
+        $themeDownloadInfo = $themeRepository->themeDownloadInfo();
 
         return view('dashboard', [
             'userMembership' => $userMembership,
             'userGrowth' => $userGrowth,
+            'themeDownloadInfo' => $themeDownloadInfo,
         ]);
     }
 
