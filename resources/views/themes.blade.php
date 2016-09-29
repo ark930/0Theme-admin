@@ -16,126 +16,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>
-                <a href="new-theme.html">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="new-theme.html">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="new-theme.html">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="http://placehold.it/100x100"/> ThemeName
-                </a>
-            </td>
-            <td>Portfolio/Magzine</td>
-            <td>Designer</td>
-            <td>1.4</td>
-            <td>09 Nov 2016</td>
-            <td>51</td>
-        </tr>
+        @foreach($themeInfo as $item)
+            <tr>
+                <td>
+                    <a href="new-theme.html">
+                        <img src="http://placehold.it/100x100"/> {{ $item['name'] }}
+                    </a>
+                </td>
+                <td>{{ $item['category'] }}</td>
+                <td>{{ $item['type'] }}</td>
+                <td>{{ $item['version'] }}</td>
+                <td>{{ $item['release_at'] }}</td>
+                <td>{{ $item['download_count'] }}</td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
 </div>

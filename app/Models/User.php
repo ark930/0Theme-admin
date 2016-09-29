@@ -27,4 +27,9 @@ class User extends Model
     protected $casts = [
         'is_admin' => 'boolean',
     ];
+
+    public function downloads()
+    {
+        return $this->hasMany('App\Models\ThemeDownload');
+    }
 }

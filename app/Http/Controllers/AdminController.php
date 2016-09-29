@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\ThemeRepository;
 use App\Repositories\UserRepository;
 
 class AdminController extends Controller
@@ -17,9 +18,13 @@ class AdminController extends Controller
         ]);
     }
 
-    public function themes()
+    public function themes(ThemeRepository $themeRepository)
     {
-        return view('themes');
+        $themeInfo = $themeRepository->themeInfo();
+
+        return view('themes', [
+            'themeInfo' => $themeInfo
+        ]);
     }
 
     public function users()
