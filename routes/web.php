@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/home', 'HomeController@index');
+//Route::post('/home', 'HomeController@login');
+
+Route::get('/', 'UserController@index');
+Route::post('/login', 'UserController@login');
+Route::get('/logout', 'UserController@logout');
+
+Route::get('/dashboard', 'AdminController@dashboard');
+Route::get('/themes', 'AdminController@themes');
+Route::get('/users', 'AdminController@users');
+Route::get('/finance', 'AdminController@finance');
+Route::get('/settings', 'AdminController@settings');
