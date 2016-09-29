@@ -94,7 +94,21 @@
 <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            "ajax": "/user_info",
+            "deferRender": true,
+            "columnDefs": [
+                {
+                    // The `data` parameter refers to the data for the cell (defined by the
+                    // `data` option, which defaults to the column being worked with, in
+                    // this case `data: 0`.
+                    "render": function ( data, type, row ) {
+                        return '<td><a href="single-user.html">' + data + '</a></td>';
+                    },
+                    "targets": 0
+                }
+            ]
+        });
     });
 </script>
 @endsection

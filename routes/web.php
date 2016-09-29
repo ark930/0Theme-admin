@@ -23,3 +23,5 @@ Route::get('/themes', 'AdminController@themes');
 Route::get('/users', 'AdminController@users');
 Route::get('/finance', 'AdminController@finance');
 Route::get('/settings', 'AdminController@settings');
+
+Route::get('/user_info', 'AdminController@userInfo');
