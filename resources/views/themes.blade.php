@@ -19,7 +19,7 @@
         @foreach($themeInfo as $item)
             <tr>
                 <td>
-                    <a href="new-theme.html">
+                    <a href="{{ '/theme/new/' . $item['id'] }}">
                         <img src="http://placehold.it/100x100"/> {{ $item['name'] }}
                     </a>
                 </td>

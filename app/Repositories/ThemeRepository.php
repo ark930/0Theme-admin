@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Theme;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class ThemeRepository {
@@ -18,11 +19,12 @@ class ThemeRepository {
     {
         $themes = $this->model->all();
 
-        $ret = [];
+        $info = new Collection();
         foreach ($themes as $theme) {
             $currentVersion = $theme->currentVersion;
 
-            $ret[] = [
+            $info[] = [
+                'id' => $theme['id'],
                 'name' => $theme['name'],
                 'category' => $theme->categoryTags(),
                 'type' => $theme->typeTags(),
@@ -32,7 +34,11 @@ class ThemeRepository {
             ];
         }
 
-        return $ret;
+        $sorted = $info->sortByDesc(function ($item, $key) {
+            return $item['download_count'];
+        });
+
+        return $sorted->all();
     }
 
     public function themeDownloadInfo()
