@@ -17,7 +17,7 @@ class UserController extends Controller
     public function login(Request $request, GoogleAuthenticator $googleAuthenticator)
     {
         $this->validate($request, [
-            'pwd' => 'required|regex:/^[a-zA-Z0-9]{8,}$/',
+//            'pwd' => 'required|regex:/^[a-zA-Z0-9]{8,}$/',
             'code' => 'required|regex:/^\d{6}$/',
         ]);
 
@@ -33,7 +33,9 @@ class UserController extends Controller
         $password = $request->input('pwd');
         $code = $request->input('code');
         $secret = 'SY3NRGNH5XAEFNHE';
-        if($googleAuthenticator->verifyCode($secret, $code, 0) && $password === 'qwertyuiop') {
+        if($googleAuthenticator->verifyCode($secret, $code, 0)
+//           && $password === 'qwertyuiop'
+        ) {
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
 
