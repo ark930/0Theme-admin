@@ -75,14 +75,10 @@
             <ul>
                 @foreach($themeDownloadInfo as $item)
                     <li>
-                        <a href="">{{ $item['name'] }}</a>
-                        <p>Design<time>Downloads:{{ $item['total'] }}</time></p>
+                        <a href="">{{ $item->name }}</a>
+                        <p>Design<time>Downloads:{{ $item->total }}</time></p>
                     </li>
                 @endforeach
-                <li>
-                    <a href="">Themename</a>
-                    <p>Design<time>Downloads:30</time></p>
-                </li>
             </ul>
         </div>
     </div>
