@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Repositories\ThemeRepository;
 use App\Repositories\UserRepository;
 
@@ -44,9 +45,13 @@ class AdminController extends Controller
         return view('settings');
     }
 
-    public function userDetails()
+    public function userDetails($user_id)
     {
-        return view('user_details');
+        $user = User::findOrFail($user_id);
+
+        return view('user_details', [
+            'user' => $user,
+        ]);
     }
 
     public function newTheme()
