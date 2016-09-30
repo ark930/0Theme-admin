@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Repositories\ThemeRepository;
 use App\Repositories\UserRepository;
+use Chumper\Zipper\Zipper;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -69,9 +72,29 @@ class AdminController extends Controller
         return '';
     }
 
-    public function upgradeThemeUpload()
+    public function upgradeThemeUpload(Request $request, $theme_id)
     {
-        return '';
+        $uploadPath = 'theme_upload';
+
+        // todo check the file size
+        $filePath = $request->file('package')->store($uploadPath);
+
+        $zipper = new Zipper();
+        $zipFile = storage_path(sprintf('app/%s', $filePath));
+        $unzipDir = storage_path(sprintf('app/%s', $uploadPath));
+        $zipper->make($zipFile)->extractTo($unzipDir, ['__MACOSX'], Zipper::BLACKLIST) ;
+
+        $themePath = Storage::directories($uploadPath)[0];
+        $configPath = sprintf('%s/config.json', $themePath);
+        $changelogPath = sprintf('%s/changelog.txt', $themePath);
+        $config = Storage::get($configPath);
+        $changelog = Storage::get($changelogPath);
+
+        Storage::delete($filePath);
+        return redirect()->back()->with([
+            'config' => json_decode($config, true),
+            'changelog' => $changelog,
+        ]);
     }
 
     /**
