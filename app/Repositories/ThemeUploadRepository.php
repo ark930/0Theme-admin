@@ -153,9 +153,11 @@ class ThemeUploadRepository {
     /**
      * Validate theme content
      *
+     * @param null $theme
+     *
      * @return bool
      */
-    public function validateThemeContent()
+    public function validateThemeContent($theme = null)
     {
         if(!is_array($this->config) || empty($this->config)) {
             return false;
@@ -179,6 +181,12 @@ class ThemeUploadRepository {
         $categories = $this->config['categories'];
         $types = $this->config['types'];
         $showcases = $this->config['showcases'];
+
+        if(!is_null($theme)) {
+            if($themeName != $theme['name']) {
+                return false;
+            }
+        }
 
         $this->themeFileName = sprintf('%s-%s', $themeName, $version);
         $this->zipThemeFileName = sprintf('%s.zip', $this->themeFileName);
@@ -249,7 +257,7 @@ class ThemeUploadRepository {
      *
      * @param null $theme
      *
-     * @return Theme|null
+     * @return array
      */
     public function saveData($theme = null)
     {
@@ -260,6 +268,9 @@ class ThemeUploadRepository {
             $themeVersion = new ThemeVersion();
         } else {
             $themeVersion = $theme->versions()->where('version', $this->config['version'])->first();
+            if(empty($themeVersion)) {
+                $themeVersion = new ThemeVersion();
+            }
         }
 
         $theme['name'] = $this->config['name'];
@@ -316,7 +327,10 @@ class ThemeUploadRepository {
         }
         $themeVersion->showcases()->saveMany($themeVersionShowcases);
 
-        return $theme;
+        return [
+            'theme_id' => $theme['id'],
+            'theme_version_id' => $themeVersion['id'],
+        ];
     }
 
     public function getUploadPath()

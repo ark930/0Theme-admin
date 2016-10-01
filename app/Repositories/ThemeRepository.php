@@ -52,7 +52,7 @@ class ThemeRepository {
 
         foreach ($themeDownloadInfo as &$item) {
             $theme = Theme::find($item->id);
-            $item->types = $theme->typeTags();
+            $item->types = $theme->currentVersion->typeTags();
         }
 
         return $themeDownloadInfo;

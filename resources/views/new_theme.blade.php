@@ -54,7 +54,7 @@
             <div class="form-title">Uploads</div>
             <div class="form-group">
                 <label>Changelog(.txt)</label>
-                <textarea name="changelog" readonly>{{ Session::has('changelog') ? Session::get('changelog') : ''}}</textarea>
+                <textarea name="changelog" readonly>{{ Session::get('changelog') }}</textarea>
             </div>
             <div class="form-group">
                 <label>Document(url)</label>
@@ -96,9 +96,15 @@
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea name="description" readonly>{{ Session::has('description') ? Session::get('description') : ''}}</textarea>
+                <textarea name="description" readonly>{{ Session::get('description') }}</textarea>
             </div>
         </div>
+
+        <form method="post" action="{{ route('publish_theme', ['theme_id' => Session::get('theme_id'),
+        'theme_version_id' => Session::get('theme_version_id')]) }}">
+            {{ csrf_field() }}
+            <button type="submit" class="submit">PUBLISH</button>
+        </form>
     @endif
 </div>
 @endsection

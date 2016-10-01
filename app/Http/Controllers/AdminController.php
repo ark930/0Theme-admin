@@ -101,7 +101,7 @@ class AdminController extends Controller
         $description = $themeUploadRepo->getDescriptionContent();
 
         // validate theme files' content
-        if($themeUploadRepo->validateThemeContent() === false) {
+        if($themeUploadRepo->validateThemeContent($theme) === false) {
             $themeUploadRepo->clearThemeUploadDirectory();
             return redirect()->back()->withErrors("This theme's content is illegal");
         }
@@ -110,14 +110,29 @@ class AdminController extends Controller
         $themeUploadRepo->clearThemeUploadDirectory();
 
         // save data to database
-        $theme = $themeUploadRepo->saveData($theme);
+        $keys = $themeUploadRepo->saveData($theme);
 
-        $redirectTo = sprintf('/theme/new/%s', $theme['id']);
+        $redirectTo = route('upload_theme_page', ['theme_id' => $theme['id']]);
         return redirect($redirectTo)->with([
             'config' => $config,
             'changelog' => $changelog,
             'description' => $description,
+            'theme_id' => $keys['theme_id'],
+            'theme_version_id' => $keys['theme_version_id'],
         ]);
+    }
+
+    public function themeVersionPublish($theme_id, $theme_version_id)
+    {
+        $theme = Theme::findOrFail($theme_id);
+        $themeVersion = $theme->versions->where('id', $theme_version_id)->first();
+        if(empty($themeVersion)) {
+            return abort(404);
+        }
+        $theme->currentVersion()->associate($themeVersion);
+        $theme->save();
+
+        return redirect()->back();
     }
 
     /**
