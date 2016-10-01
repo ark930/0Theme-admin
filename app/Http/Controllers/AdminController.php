@@ -7,7 +7,6 @@ use App\Repositories\ThemeRepository;
 use App\Repositories\ThemeUploadRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -74,9 +73,6 @@ class AdminController extends Controller
 
     public function upgradeThemeUpload(Request $request, $theme_id, ThemeUploadRepository $themeUploadRepo)
     {
-        $uploadPath = 'theme_upload';
-
-        // todo check the file size
         $package = $request->file('package');
         $this->validate($request, [
             'package' => 'required|mimetypes:application/zip|max:50000',
@@ -87,27 +83,29 @@ class AdminController extends Controller
         // store file in $uploadPath
         $filePath = $package->store($themeUploadRepo->getUploadPath());
 
+        // unzip theme file
         $themeUploadRepo->unzipThemeFile($filePath);
 
-        // get the uploaded theme's directory name
-        $themePath = Storage::directories($uploadPath)[0];
+        // validate theme files' structure
+        if($themeUploadRepo->validateThemeStructure() === false) {
+            return redirect()->back()->withErrors("This theme's structure is illegal");
+        }
 
-        // get config content
-        $configPath = sprintf('%s/config.json', $themePath);
-        $config = Storage::get($configPath);
+        // get data from theme path
+        $config = $themeUploadRepo->getConfigContent();
+        $changelog = $themeUploadRepo->getChangelogContent();
+        $description = $themeUploadRepo->getDescriptionContent();
 
-        // get changelog content
-        $changelogPath = sprintf('%s/changelog.txt', $themePath);
-        $changelog = Storage::get($changelogPath);
+        // validate theme files' content
+        if($themeUploadRepo->validateThemeContent() === false) {
+            return redirect()->back()->withErrors("This theme's content is illegal");
+        }
 
-        // get description content
-        $descriptionPath = sprintf('%s/description/index.html', $themePath);
-        $description = Storage::get($descriptionPath);
-
-        Storage::delete($filePath);
+        $themeUploadRepo->moveFiles();
+        $themeUploadRepo->clearThemeUploadDirectory();
 
         return redirect()->back()->with([
-            'config' => json_decode($config, true),
+            'config' => $config,
             'changelog' => $changelog,
             'description' => $description,
         ]);

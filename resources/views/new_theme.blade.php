@@ -22,7 +22,7 @@
 
     @if(Session::has('config'))
         <div>
-            <div class="form-title">{{ ucfirst(Session::get('config')['membership']) }}</div>
+            <div class="form-title">Basic Information</div>
             <div class="form-group">
                 <label>Theme Name</label>
                 <input type="text" name="themeName" readonly value="{{ Session::get('config')['name']}}">
@@ -38,7 +38,7 @@
             <div class="form-group">
                 <label>Category</label>
                 <ul class="tags">
-                    @foreach(Session::get('config')['category'] as $item)
+                    @foreach(Session::get('config')['categories'] as $item)
                         <li>{{ $item }}</li>
                     @endforeach
                 </ul>
@@ -46,7 +46,7 @@
             <div class="form-group">
                 <label>Type</label>
                 <ul class="tags">
-                    @foreach(Session::get('config')['type'] as $item)
+                    @foreach(Session::get('config')['types'] as $item)
                         <li>{{ $item }}</li>
                     @endforeach
                 </ul>

@@ -77,7 +77,7 @@
                 @foreach($themeDownloadInfo as $item)
                     <li>
                         <a href="{{ '/theme/new/' . $item->id }}">{{ $item->name }}</a>
-                        <p>{{ $item->types }}<time>Downloads:{{ $item->total }}</time></p>
+                        <p>{{ empty($item->types) ? 'None' : $item->types }}<time>Downloads:{{ $item->total }}</time></p>
                     </li>
                 @endforeach
             </ul>
