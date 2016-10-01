@@ -26,11 +26,11 @@ class ThemeRepository {
             $info[] = [
                 'id' => $theme['id'],
                 'name' => $theme['name'],
-                'category' => $theme->categoryTags(),
-                'type' => $theme->typeTags(),
-                'version' => $currentVersion['version'],
-                'release_at' => $currentVersion['release_at'],
-                'download_count' => $currentVersion->downloads()->count(),
+                'category' => empty($currentVersion) ? '' : $currentVersion->categoryTags(),
+                'type' => empty($currentVersion) ? '' : $currentVersion->typeTags(),
+                'version' => empty($currentVersion) ? '' : $currentVersion['version'],
+                'release_at' => empty($currentVersion) ? '' : $currentVersion['release_at'],
+                'download_count' => empty($currentVersion) ? '' : $currentVersion->downloads()->count(),
             ];
         }
 
