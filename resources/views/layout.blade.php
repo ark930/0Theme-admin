@@ -14,5 +14,14 @@
 
 @yield('js')
 
+@if($errors->count() > 0)
+    <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.js"></script>
+
+    <script>
+        $(function() {
+            alert('{{ $errors->first() }}');
+        });
+    </script>
+@endif
 </body>
 </html>

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Repositories\ThemeRepository;
+use App\Repositories\ThemeUploadRepository;
 use App\Repositories\UserRepository;
-use Chumper\Zipper\Zipper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -72,28 +72,44 @@ class AdminController extends Controller
         return '';
     }
 
-    public function upgradeThemeUpload(Request $request, $theme_id)
+    public function upgradeThemeUpload(Request $request, $theme_id, ThemeUploadRepository $themeUploadRepo)
     {
         $uploadPath = 'theme_upload';
 
         // todo check the file size
-        $filePath = $request->file('package')->store($uploadPath);
+        $package = $request->file('package');
+        $this->validate($request, [
+            'package' => 'required|mimetypes:application/zip|max:50000',
+        ]);
 
-        $zipper = new Zipper();
-        $zipFile = storage_path(sprintf('app/%s', $filePath));
-        $unzipDir = storage_path(sprintf('app/%s', $uploadPath));
-        $zipper->make($zipFile)->extractTo($unzipDir, ['__MACOSX'], Zipper::BLACKLIST) ;
+        $themeUploadRepo->clearThemeUploadDirectory();
 
+        // store file in $uploadPath
+        $filePath = $package->store($themeUploadRepo->getUploadPath());
+
+        $themeUploadRepo->unzipThemeFile($filePath);
+
+        // get the uploaded theme's directory name
         $themePath = Storage::directories($uploadPath)[0];
+
+        // get config content
         $configPath = sprintf('%s/config.json', $themePath);
-        $changelogPath = sprintf('%s/changelog.txt', $themePath);
         $config = Storage::get($configPath);
+
+        // get changelog content
+        $changelogPath = sprintf('%s/changelog.txt', $themePath);
         $changelog = Storage::get($changelogPath);
 
+        // get description content
+        $descriptionPath = sprintf('%s/description/index.html', $themePath);
+        $description = Storage::get($descriptionPath);
+
         Storage::delete($filePath);
+
         return redirect()->back()->with([
             'config' => json_decode($config, true),
             'changelog' => $changelog,
+            'description' => $description,
         ]);
     }
 

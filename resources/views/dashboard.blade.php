@@ -7,6 +7,7 @@
     <div class="widget stru" style="width: 50%">
         <h3>User Structure</h3>
         <div class="box">
+            <div class="score">{{ $userMembership['free'] }}<span>Free</span></div>
             <div class="score">{{ $userMembership['basic'] }}<span>Basic</span></div>
             <div class="score">{{ $userMembership['pro'] }}<span>Pro</span></div>
             <div class="score">{{ $userMembership['lifetime'] }}<span>Lifetime</span></div>

@@ -27,6 +27,10 @@ class UserRepository
             $ret[$item->membership] = $item->total;
         }
 
+        if(!isset($ret['free'])) {
+            $ret['free'] = 0;
+        }
+
         if(!isset($ret['basic'])) {
             $ret['basic'] = 0;
         }
