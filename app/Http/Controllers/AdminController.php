@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Theme;
 use App\Models\User;
 use App\Repositories\ThemeRepository;
 use App\Repositories\ThemeUploadRepository;
@@ -56,23 +57,25 @@ class AdminController extends Controller
         ]);
     }
 
-    public function newTheme()
+    public function newOrUpgradeTheme($theme_id = null)
     {
-        return view('new_theme');
+        $theme = null;
+        if(!is_null($theme_id)) {
+            $theme = Theme::findOrFail($theme_id);
+        }
+
+        return view('new_theme', [
+            'theme' => $theme,
+        ]);
     }
 
-    public function updateTheme()
+    public function newOrUpgradeThemeUpload(Request $request, ThemeUploadRepository $themeUploadRepo, $theme_id = null)
     {
-        return view('new_theme');
-    }
+        $theme = null;
+        if(!is_null($theme_id)) {
+            $theme = Theme::findOrFail($theme_id);
+        }
 
-    public function newThemeUpload()
-    {
-        return '';
-    }
-
-    public function upgradeThemeUpload(Request $request, $theme_id, ThemeUploadRepository $themeUploadRepo)
-    {
         $package = $request->file('package');
         $this->validate($request, [
             'package' => 'required|mimetypes:application/zip|max:50000',
@@ -88,6 +91,7 @@ class AdminController extends Controller
 
         // validate theme files' structure
         if($themeUploadRepo->validateThemeStructure() === false) {
+            $themeUploadRepo->clearThemeUploadDirectory();
             return redirect()->back()->withErrors("This theme's structure is illegal");
         }
 
@@ -98,13 +102,18 @@ class AdminController extends Controller
 
         // validate theme files' content
         if($themeUploadRepo->validateThemeContent() === false) {
+            $themeUploadRepo->clearThemeUploadDirectory();
             return redirect()->back()->withErrors("This theme's content is illegal");
         }
 
         $themeUploadRepo->moveFiles();
         $themeUploadRepo->clearThemeUploadDirectory();
 
-        return redirect()->back()->with([
+        // save data to database
+        $theme = $themeUploadRepo->saveData($theme);
+
+        $redirectTo = sprintf('/theme/new/%s', $theme['id']);
+        return redirect($redirectTo)->with([
             'config' => $config,
             'changelog' => $changelog,
             'description' => $description,

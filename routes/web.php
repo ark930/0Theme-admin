@@ -27,10 +27,8 @@ Route::group(['middleware' => []], function() {
 
     Route::get('/user/{user_id}', 'AdminController@userDetails')->where('user_id', '[0-9]+');
 
-    Route::get('/theme/new', 'AdminController@newTheme');
-    Route::get('/theme/new/{theme_id}', 'AdminController@updateTheme')->where('theme_id', '[0-9]+');
-    Route::post('/theme/new', 'AdminController@newThemeUpload');
-    Route::post('/theme/new/{theme_id}', 'AdminController@upgradeThemeUpload')->where('theme_id', '[0-9]+');
+    Route::get('/theme/new/{theme_id?}', 'AdminController@newOrUpgradeTheme')->where('theme_id', '[0-9]*');
+    Route::post('/theme/new/{theme_id?}', 'AdminController@newOrUpgradeThemeUpload')->where('theme_id', '[0-9]*');
 
     Route::get('/user_info', 'AdminController@userInfo');
 });

@@ -2,6 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\Tag;
+use App\Models\Theme;
+use App\Models\ThemeVersion;
+use App\MOdels\ThemeVersionShowcase;
 use Chumper\Zipper\Zipper;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,7 +54,6 @@ class ThemeUploadRepository {
     private $changelog = null;
     private $description = null;
 
-
     /**
      * Clear the theme directory include subdirectories and files
      */
@@ -95,6 +98,12 @@ class ThemeUploadRepository {
         $this->config = Storage::get($this->configPath);
 
         $this->config = json_decode($this->config, true);
+
+        foreach ($this->config as $k => &$v) {
+            if(is_string($v)) {
+                $v = trim($v);
+            }
+        }
 
         return $this->config;
     }
@@ -165,11 +174,6 @@ class ThemeUploadRepository {
         $themeName = $this->config['name'];
         $version = $this->config['version'];
         $sha1 = $this->config['sha1'];
-        $requirements = $this->config['requirements'];
-        $document_url = $this->config['document_url'];
-        $has_free = $this->config['has_free'];
-        $free_url = $this->config['free_url'];
-        $description = $this->config['description'];
         $thumbnail = $this->config['thumbnail'];
         $thumbnailTiny = $this->config['thumbnail_tiny'];
         $categories = $this->config['categories'];
@@ -235,6 +239,84 @@ class ThemeUploadRepository {
             Storage::deleteDirectory($toPath);
         }
         Storage::move($fromPath, $toPath);
+    }
+
+    /**
+     * Save data to database
+     *
+     * if $theme is null, a new theme will be saved,
+     * otherwise refresh the theme data
+     *
+     * @param null $theme
+     *
+     * @return Theme|null
+     */
+    public function saveData($theme = null)
+    {
+        $themeVersion = null;
+
+        if(is_null($theme)) {
+            $theme = new Theme();
+            $themeVersion = new ThemeVersion();
+        } else {
+            $themeVersion = $theme->versions()->where('version', $this->config['version'])->first();
+        }
+
+        $theme['name'] = $this->config['name'];
+        $theme->save();
+
+        $themeVersion['sha1'] = $this->config['sha1'];
+        $themeVersion['version'] = $this->config['version'];
+        $themeVersion['requirements'] = $this->config['requirements'];
+        $themeVersion['document_url'] = $this->config['document_url'];
+        $themeVersion['has_free'] = $this->config['has_free'];
+        $themeVersion['free_url'] = $this->config['free_url'];
+        $themeVersion['description'] = $this->config['description'];
+        $themeVersion['thumbnail'] = $this->config['thumbnail'];
+        $themeVersion['thumbnail_tiny'] = $this->config['thumbnail_tiny'];
+        $themeVersion['release_at'] = date('Y-m-d H:i:s');
+        $themeVersion['store_at'] = sprintf('%s/%s', $this->themeTargetPath, $this->zipThemeFileName);
+        $themeVersion['store_type'] = 'local';
+        $theme->versions()->save($themeVersion);
+
+        $tags = [];
+        foreach ($this->config['categories'] as $category) {
+            $tag = new Tag();
+            $tag['name'] = $category;
+            $tag['type'] = 'theme_category';
+            $tags[] = $tag;
+        }
+        foreach ($this->config['types'] as $type) {
+            $tag = new Tag();
+            $tag['name'] = $type;
+            $tag['type'] = 'theme_type';
+            $tags[] = $tag;
+        }
+
+        // detach old tags to the theme version then attach the new tags
+        $oldTags = $themeVersion->tags;
+        $themeVersion->tags()->detach();
+        foreach ($oldTags as $oldTag) {
+            $oldTag->delete();
+        }
+        $themeVersion->tags()->saveMany($tags);
+
+        $themeVersionShowcases = [];
+        foreach ($this->config['showcases'] as $showcase) {
+            $themeVersionShowcase = new ThemeVersionShowcase();
+            $themeVersionShowcase['name'] = $showcase['name'];
+            $themeVersionShowcase['title'] = $showcase['title'];
+            $themeVersionShowcases[] = $themeVersionShowcase;
+        }
+
+        // delete the old showcases and save the new showcases
+        $oldShowcases = $themeVersion->showcases;
+        foreach ($oldShowcases as $oldShowcase) {
+            $oldShowcase->delete();
+        }
+        $themeVersion->showcases()->saveMany($themeVersionShowcases);
+
+        return $theme;
     }
 
     public function getUploadPath()
