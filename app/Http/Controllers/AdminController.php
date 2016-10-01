@@ -64,8 +64,13 @@ class AdminController extends Controller
             $theme = Theme::findOrFail($theme_id);
         }
 
+        if(is_null($theme)) {
+            return view('new_theme');
+        }
+
         return view('new_theme', [
             'theme' => $theme,
+            'themeVersion' => $theme->currentVersion,
         ]);
     }
 
@@ -95,11 +100,6 @@ class AdminController extends Controller
             return redirect()->back()->withErrors("This theme's structure is illegal");
         }
 
-        // get data from theme path
-        $config = $themeUploadRepo->getConfigContent();
-        $changelog = $themeUploadRepo->getChangelogContent();
-        $description = $themeUploadRepo->getDescriptionContent();
-
         // validate theme files' content
         if($themeUploadRepo->validateThemeContent($theme) === false) {
             $themeUploadRepo->clearThemeUploadDirectory();
@@ -110,16 +110,11 @@ class AdminController extends Controller
         $themeUploadRepo->clearThemeUploadDirectory();
 
         // save data to database
-        $keys = $themeUploadRepo->saveData($theme);
+        $data = $themeUploadRepo->saveData($theme);
+        $data['new'] = true;
 
-        $redirectTo = route('upload_theme_page', ['theme_id' => $theme['id']]);
-        return redirect($redirectTo)->with([
-            'config' => $config,
-            'changelog' => $changelog,
-            'description' => $description,
-            'theme_id' => $keys['theme_id'],
-            'theme_version_id' => $keys['theme_version_id'],
-        ]);
+        $redirectTo = route('upload_theme_page', ['theme_id' => $data['theme']['id']]);
+        return redirect($redirectTo)->with($data);
     }
 
     public function themeVersionPublish($theme_id, $theme_version_id)

@@ -27,9 +27,9 @@ Route::group(['middleware' => []], function() {
 
     Route::get('/user/{user_id}', 'AdminController@userDetails')->where('user_id', '[0-9]+');
 
-    Route::get('/theme/{theme_id?}/new', 'AdminController@newOrUpgradeTheme')->where('theme_id', '[0-9]*')
+    Route::get('/theme/new/{theme_id?}', 'AdminController@newOrUpgradeTheme')->where('theme_id', '[0-9]*')
         ->name('upload_theme_page');
-    Route::post('/theme/{theme_id?}/new', 'AdminController@newOrUpgradeThemeUpload')->where('theme_id', '[0-9]*');
+    Route::post('/theme/new/{theme_id?}', 'AdminController@newOrUpgradeThemeUpload')->where('theme_id', '[0-9]*');
     Route::post('/theme/{theme_id}/version/{theme_version_id}/publish', 'AdminController@themeVersionPublish')
         ->where('theme_id', '[0-9]*')
         ->where('theme_version', '[0-9]+')

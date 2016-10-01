@@ -26,8 +26,8 @@ class ThemeRepository {
             $info[] = [
                 'id' => $theme['id'],
                 'name' => $theme['name'],
-                'category' => empty($currentVersion) ? '' : $currentVersion->categoryTags(),
-                'type' => empty($currentVersion) ? '' : $currentVersion->typeTags(),
+                'category' => empty($currentVersion) ? '' : $currentVersion->categoryTagsString(),
+                'type' => empty($currentVersion) ? '' : $currentVersion->typeTagsString(),
                 'version' => empty($currentVersion) ? '' : $currentVersion['version'],
                 'release_at' => empty($currentVersion) ? '' : $currentVersion['release_at'],
                 'download_count' => empty($currentVersion) ? '' : $currentVersion->downloads()->count(),
@@ -52,7 +52,7 @@ class ThemeRepository {
 
         foreach ($themeDownloadInfo as &$item) {
             $theme = Theme::find($item->id);
-            $item->types = $theme->currentVersion->typeTags();
+            $item->types = $theme->currentVersion->typeTagsString();
         }
 
         return $themeDownloadInfo;

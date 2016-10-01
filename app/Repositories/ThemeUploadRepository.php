@@ -159,6 +159,11 @@ class ThemeUploadRepository {
      */
     public function validateThemeContent($theme = null)
     {
+        // get data from theme path
+        $this->getConfigContent();
+        $this->getChangelogContent();
+        $this->getDescriptionContent();
+
         if(!is_array($this->config) || empty($this->config)) {
             return false;
         }
@@ -283,6 +288,7 @@ class ThemeUploadRepository {
         $themeVersion['has_free'] = $this->config['has_free'];
         $themeVersion['free_url'] = $this->config['free_url'];
         $themeVersion['description'] = $this->config['description'];
+        $themeVersion['changelog'] = $this->changelog;
         $themeVersion['thumbnail'] = $this->config['thumbnail'];
         $themeVersion['thumbnail_tiny'] = $this->config['thumbnail_tiny'];
         $themeVersion['release_at'] = date('Y-m-d H:i:s');
@@ -328,8 +334,8 @@ class ThemeUploadRepository {
         $themeVersion->showcases()->saveMany($themeVersionShowcases);
 
         return [
-            'theme_id' => $theme['id'],
-            'theme_version_id' => $themeVersion['id'],
+            'theme' => $theme,
+            'theme_version' => $themeVersion,
         ];
     }
 
