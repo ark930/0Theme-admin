@@ -50,6 +50,11 @@ class ThemeRepository {
             ->groupBy('themes.id')
             ->get();
 
+        foreach ($themeDownloadInfo as &$item) {
+            $theme = Theme::find($item->id);
+            $item->types = $theme->typeTags();
+        }
+
         return $themeDownloadInfo;
     }
 }

@@ -76,8 +76,8 @@
             <ul>
                 @foreach($themeDownloadInfo as $item)
                     <li>
-                        <a href="">{{ $item->name }}</a>
-                        <p>Design<time>Downloads:{{ $item->total }}</time></p>
+                        <a href="{{ '/theme/new/' . $item->id }}">{{ $item->name }}</a>
+                        <p>{{ $item->types }}<time>Downloads:{{ $item->total }}</time></p>
                     </li>
                 @endforeach
             </ul>
