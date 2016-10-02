@@ -15,23 +15,23 @@ class ThemeUploadRepository {
      *
      * @var string
      */
-    private $uploadPath = 'theme_upload';
+    const UPLOAD_PATH = 'theme_upload';
 
     /**
-     * A path for theme file
+     * A path for theme file under storage/app
      *
      * @var string
      */
-    private $themeTargetPath = 'theme';
+    const THEME_TARGET_PATH = 'theme';
 
     /**
-     * A path for theme resources
+     * A path for theme resources under storage/app
      * for example:
      *      thumbnails, showcases and descriptions
      *
      * @var string
      */
-    private $themeResourcePath = 'public/theme';
+    const THEME_RESOURCE_PATH = 'public/theme';
 
     /**
      *  A path for the theme which uploaded and extracted
@@ -47,8 +47,6 @@ class ThemeUploadRepository {
     private $configPath = null;
     private $changelogPath = null;
     private $descriptionIndexPath = null;
-    private $thumbnailPath = null;
-    private $thumbnailTinyPath = null;
 
     private $config = null;
     private $changelog = null;
@@ -71,7 +69,7 @@ class ThemeUploadRepository {
     }
 
     /**
-     * Extract zip file to $uploadPath
+     * Extract zip file to UPLOAD_PATH
      *
      * @param $unzipFilePath
      */
@@ -82,7 +80,7 @@ class ThemeUploadRepository {
         $unzipDir = storage_path(sprintf('app/%s', $this->getUploadPath()));
         $zipper->make($zipFile)->extractTo($unzipDir, ['__MACOSX'], Zipper::BLACKLIST);
 
-        $this->themeExtractedPath = Storage::directories($this->uploadPath)[0];
+        $this->themeExtractedPath = Storage::directories($this->getUploadPath())[0];
         $this->configPath = sprintf('%s/config.json', $this->themeExtractedPath);
         $this->changelogPath = sprintf('%s/changelog.txt', $this->themeExtractedPath);
         $this->descriptionIndexPath = sprintf('%s/description/index.html', $this->themeExtractedPath);
@@ -196,8 +194,8 @@ class ThemeUploadRepository {
         $this->themeFileName = sprintf('%s-%s', $themeName, $version);
         $this->zipThemeFileName = sprintf('%s.zip', $this->themeFileName);
         $this->themePath = sprintf('%s/%s', $this->themeExtractedPath, $this->zipThemeFileName);
-        $this->thumbnailPath = sprintf('%s/thumbnail/%s', $this->themeExtractedPath, $thumbnail);
-        $this->thumbnailTinyPath = sprintf('%s/thumbnail/%s', $this->themeExtractedPath, $thumbnailTiny);
+        $thumbnailPath = sprintf('%s/thumbnail/%s', $this->themeExtractedPath, $thumbnail);
+        $thumbnailTinyPath = sprintf('%s/thumbnail/%s', $this->themeExtractedPath, $thumbnailTiny);
 
         if(Storage::exists($this->themePath) == false) {
             return false;
@@ -208,11 +206,11 @@ class ThemeUploadRepository {
             return false;
         }
 
-        if(Storage::exists($this->thumbnailPath) == false) {
+        if(Storage::exists($thumbnailPath) == false) {
             return false;
         }
 
-        if(Storage::exists($this->thumbnailTinyPath) == false) {
+        if(Storage::exists($thumbnailTinyPath) == false) {
             return false;
         }
 
@@ -239,7 +237,7 @@ class ThemeUploadRepository {
 
         // move theme zip file to target path
         $fromPath = $this->themePath;
-        $toPath = sprintf('%s/%s', $this->themeTargetPath, $this->zipThemeFileName);
+        $toPath = sprintf('%s/%s', self::THEME_TARGET_PATH, $this->zipThemeFileName);
         if(Storage::exists($toPath)) {
             Storage::delete($toPath);
         }
@@ -247,7 +245,7 @@ class ThemeUploadRepository {
 
         // move theme resource directory to public path
         $fromPath = $this->themeExtractedPath;
-        $toPath = sprintf('%s/%s', $this->themeResourcePath, $this->themeFileName);
+        $toPath = sprintf('%s/%s/%s', self::THEME_RESOURCE_PATH, $this->config['name'], $this->config['version']);
         if(Storage::exists($toPath)) {
             Storage::deleteDirectory($toPath);
         }
@@ -287,12 +285,12 @@ class ThemeUploadRepository {
         $themeVersion['document_url'] = $this->config['document_url'];
         $themeVersion['has_free'] = $this->config['has_free'];
         $themeVersion['free_url'] = $this->config['free_url'];
-        $themeVersion['description'] = $this->config['description'];
+        $themeVersion['description'] = $this->description;
         $themeVersion['changelog'] = $this->changelog;
         $themeVersion['thumbnail'] = $this->config['thumbnail'];
         $themeVersion['thumbnail_tiny'] = $this->config['thumbnail_tiny'];
         $themeVersion['release_at'] = date('Y-m-d H:i:s');
-        $themeVersion['store_at'] = sprintf('%s/%s', $this->themeTargetPath, $this->zipThemeFileName);
+        $themeVersion['store_at'] = sprintf('%s/%s', self::THEME_TARGET_PATH, $this->zipThemeFileName);
         $themeVersion['store_type'] = 'local';
         $theme->versions()->save($themeVersion);
 
@@ -341,7 +339,7 @@ class ThemeUploadRepository {
 
     public function getUploadPath()
     {
-        return $this->uploadPath;
+        return self::UPLOAD_PATH;
     }
 
 }

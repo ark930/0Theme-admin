@@ -11,9 +11,10 @@ class ThemeVersion extends Model
      *
      * First %s: theme full name
      * Second %s: subdirectory
-     * Third %s: file name
+     * Third %s: theme name
+     * Fourth %s: theme version
      */
-    const THEME_RESOURCE_TEMPLATE_PATH = 'storage/theme/%s/%s/%s';
+    const THEME_RESOURCE_TEMPLATE_PATH = 'storage/theme/%s/%s/%s/%s';
 
     const THUMBNAIL_DIRECTORY_NAME = 'thumbnail';
     const SHOWCASE_DIRECTORY_NAME = 'showcase';
@@ -72,15 +73,11 @@ class ThemeVersion extends Model
         return $this->tags->where('type', 'theme_type')->implode('name', '/');
     }
 
-    public function getThemeFullName()
-    {
-        return sprintf('%s-%s', $this->theme['name'], $this['version']);
-    }
-
     public function getThumbnailUrl()
     {
         $path = sprintf(self::THEME_RESOURCE_TEMPLATE_PATH,
-            $this->getThemeFullName(), self::THUMBNAIL_DIRECTORY_NAME, $this['thumbnail']);
+            $this->theme['name'], $this['version'],
+            self::THUMBNAIL_DIRECTORY_NAME, $this['thumbnail']);
 
         return url($path);
     }
@@ -88,7 +85,8 @@ class ThemeVersion extends Model
     public function getThumbnailTinyUrl()
     {
         $path = sprintf(self::THEME_RESOURCE_TEMPLATE_PATH,
-            $this->getThemeFullName(), self::THUMBNAIL_DIRECTORY_NAME, $this['thumbnail_tiny']);
+            $this->theme['name'], $this['version'],
+            self::THUMBNAIL_DIRECTORY_NAME, $this['thumbnail_tiny']);
 
         return url($path);
     }
@@ -98,7 +96,8 @@ class ThemeVersion extends Model
         $data = [];
         foreach ($this->showcases as $item) {
             $path = sprintf(self::THEME_RESOURCE_TEMPLATE_PATH,
-                $this->getThemeFullName(), self::SHOWCASE_DIRECTORY_NAME, $item['name']);
+                $this->theme['name'], $this['version'],
+                self::SHOWCASE_DIRECTORY_NAME, $item['name']);
             $data[] = [
                 'title' => $item['title'],
                 'url' => url($path),
