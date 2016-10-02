@@ -187,7 +187,7 @@ class ThemeUploadRepository {
 
         if(is_null($theme)) {
             // if create a new theme, check whether the theme name has already existed or not
-            if(!empty(Theme::where('name', $themeName)->get())) {
+            if(!empty(Theme::where('name', $themeName)->first())) {
                 return false;
             }
         } else {
