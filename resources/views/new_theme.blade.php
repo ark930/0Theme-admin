@@ -70,35 +70,25 @@
             <label>Free Download(url)</label>
             <input type="url" name="freeUrl" value="{{ $themeVersion['free_url'] }}" readonly/>
         </div>
-        <div class="form-group">
-            <label>Premium Download(.zip)</label>
-            <input type="url" name="proUrl" value="http://" readonly/>
-        </div>
         <div class="form-title">Details</div>
         <div class="form-group">
             <label>Showcase(800*1200 .jpg)</label>
             <ul>
+                @foreach($themeVersion->getShowcaseUrls() as $item)
                 <li>
-                    <img src="http://placehold.it/800x1200" />
+                    <label>{{ $item['title'] }}</label>
+                    <img src="{{ $item['url'] }}" />
                 </li>
-                <li>
-                    <img src="http://placehold.it/800x1200" />
-                </li>
-                <li>
-                    <img src="http://placehold.it/800x1200" />
-                </li>
-                <li>
-                    <img src="http://placehold.it/800x1200" />
-                </li>
+                @endforeach
             </ul>
         </div>
         <div class="form-group">
             <label>Thumbnail(400x800)</label>
-            <img src="http://placehold.it/400x800" />
+            <img src="{{ $themeVersion->getThumbnailUrl() }}" />
         </div>
         <div class="form-group">
             <label>Thumbnail Tiny(100x100)</label>
-            <img src="http://placehold.it/100x100" />
+            <img src="{{ $themeVersion->getThumbnailTinyUrl() }}" />
         </div>
         <div class="form-group">
             <label>Description</label>
