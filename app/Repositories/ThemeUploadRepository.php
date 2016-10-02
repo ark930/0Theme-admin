@@ -185,7 +185,13 @@ class ThemeUploadRepository {
         $types = $this->config['types'];
         $showcases = $this->config['showcases'];
 
-        if(!is_null($theme)) {
+        if(is_null($theme)) {
+            // if create a new theme, check whether the theme name has already existed or not
+            if(!empty(Theme::where('name', $themeName)->get())) {
+                return false;
+            }
+        } else {
+            // if upgrade a new theme version, check whether both theme names matches or not
             if($themeName != $theme['name']) {
                 return false;
             }
