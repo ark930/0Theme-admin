@@ -31,6 +31,7 @@ class ThemeRepository {
                 'version' => empty($currentVersion) ? '' : $currentVersion['version'],
                 'release_at' => empty($currentVersion) ? '' : $currentVersion['release_at'],
                 'download_count' => empty($currentVersion) ? '' : $currentVersion->downloads()->count(),
+                'thumbnail_tiny_url' => empty($currentVersion) ? '' : $currentVersion->getThumbnailTinyUrl(),
             ];
         }
 

@@ -20,7 +20,7 @@
             <tr>
                 <td>
                     <a href="{{ route('upload_theme_page', ['theme_id' => $item['id']]) }}">
-                        <img src="http://placehold.it/100x100"/> {{ $item['name'] }}
+                        <img src="{{ $item['thumbnail_tiny_url'] }}"/> {{ $item['name'] }}
                     </a>
                 </td>
                 <td>{{ $item['category'] }}</td>
