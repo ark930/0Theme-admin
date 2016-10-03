@@ -79,8 +79,8 @@ class UserRepository
     {
         return $this->user
             ->where('registered', 1)
-            ->where('register_at', '>=', $this->today())
-            ->where('register_at', '<', $this->tomorrow())
+            ->where('register_at', '>=', Datetime::today())
+            ->where('register_at', '<', Datetime::tomorrow())
             ->count();
     }
 
@@ -88,8 +88,8 @@ class UserRepository
     {
         return $this->user
             ->where('registered', 1)
-            ->where('register_at', '>=', $this->thisMonth())
-            ->where('register_at', '<', $this->nextMonth())
+            ->where('register_at', '>=', Datetime::thisMonth())
+            ->where('register_at', '<', Datetime::nextMonth())
             ->count();
     }
 
@@ -97,8 +97,8 @@ class UserRepository
     {
         return $this->user
             ->where('registered', 1)
-            ->where('register_at', '>=', $this->thisYear())
-            ->where('register_at', '<', $this->nextYear())
+            ->where('register_at', '>=', Datetime::thisYear())
+            ->where('register_at', '<', Datetime::nextYear())
             ->count();
     }
 
@@ -109,33 +109,4 @@ class UserRepository
             ->count();
     }
 
-    private function today()
-    {
-        return date('Y-m-d 00:00:00');
-    }
-
-    private function tomorrow()
-    {
-        return date('Y-m-d 00:00:00', strtotime("+1 day"));
-    }
-
-    private function thisMonth()
-    {
-        return date('Y-m-1 00:00:00');
-    }
-
-    private function nextMonth()
-    {
-        return date('Y-m-1 00:00:00', strtotime("+1 month"));
-    }
-
-    private function thisYear()
-    {
-        return date('Y-1-1 00:00:00');
-    }
-
-    private function nextYear()
-    {
-        return date('Y-1-1 00:00:00', strtotime("+1 year"));
-    }
 }

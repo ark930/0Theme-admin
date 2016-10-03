@@ -37,5 +37,6 @@ Route::group(['middleware' => []], function() {
         ->name('publish_theme');
 
     Route::get('/user_info', 'AdminController@userInfo');
+    Route::get('/order_info', 'OrderController@orderInfo');
 });
 

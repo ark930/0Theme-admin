@@ -27,19 +27,19 @@
         <div class="box">
             <div class="price">
                 <span>Today</span>
-                <h3>$70000</h3>
+                <h3>{{ $earningData['today'] }}</h3>
             </div>
             <div class="price">
                 <span>Monthly</span>
-                <h3>$70000</h3>
+                <h3>{{ $earningData['month'] }}</h3>
             </div>
             <div class="price">
                 <span>Yearly</span>
-                <h3>$70000</h3>
+                <h3>{{ $earningData['year'] }}</h3>
             </div>
             <div class="price">
                 <span>Total</span>
-                <h3>$70000</h3>
+                <h3>{{ $earningData['total'] }}</h3>
             </div>
         </div>
     </div>

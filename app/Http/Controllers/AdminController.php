@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Theme;
 use App\Models\User;
+use App\Repositories\OrderRepository;
 use App\Repositories\ThemeRepository;
 use App\Repositories\ThemeUploadRepository;
 use App\Repositories\UserRepository;
@@ -11,16 +13,18 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function dashboard(UserRepository $userRepository, ThemeRepository $themeRepository)
+    public function dashboard(UserRepository $userRepository, ThemeRepository $themeRepository, OrderRepository $orderRepository)
     {
         $userMembership = $userRepository->userMembershipData();
         $userGrowth = $userRepository->userGrowthData();
         $themeDownloadInfo = $themeRepository->themeDownloadInfo();
+        $earningData = $orderRepository->earningData();
 
         return view('dashboard', [
             'userMembership' => $userMembership,
             'userGrowth' => $userGrowth,
             'themeDownloadInfo' => $themeDownloadInfo,
+            'earningData' => $earningData,
         ]);
     }
 
@@ -144,5 +148,12 @@ class AdminController extends Controller
         return [
             'data' => $userInfo,
         ];
+    }
+
+    public function logInfo()
+    {
+        $logs = Log::all();
+
+        return $logs;
     }
 }
