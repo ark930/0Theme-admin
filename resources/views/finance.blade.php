@@ -22,25 +22,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Username</td>
-            <td>Basic<span>Themename</span></td>
-            <td>contact@baohan.me<span>Paypal</span></td>
-            <td>98734972389473</td>
-            <td>08 Feb 2015</td>
-            <td>+$45.00</td>
-            <td>Success</td>
-            <td><a href="">Refund</a> </td>
-        </tr>
-        <tr>
-            <td>Username</td>
-            <td>Basic<span>Themename</span></td>
-            <td>contact@baohan.me<span>Paypal</span></td>
-            <td>98734972389473</td>
-            <td>08 Feb 2015</td>
-            <td>+$45.00</td>
-            <td>Error</td>
-            <td></td>
+
         </tbody>
     </table>
 </div>
@@ -51,7 +33,22 @@
     <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                "ajax": "/order_info",
+                "deferRender": true,
+//                "columnDefs": [
+//                    {
+//                        // The `data` parameter refers to the data for the cell (defined by the
+//                        // `data` option, which defaults to the column being worked with, in
+//                        // this case `data: 0`.
+//                        "render": function ( data, type, row ) {
+//                            return '<td><a href="/user/' + row[5] + '">' + data + '</a></td>';
+//                        },
+//                        "targets": 0
+//                    },
+//                    { "visible": false,  "targets": [ 5 ] }
+//                ]
+            });
         });
     </script>
 @endsection

@@ -51,10 +51,10 @@
                 <label>Actived Sites</label>
                 <h3>12</h3>
             </div>
-            <div class="form-group">
-                <label>AppKey</label>
-                <h3></h3>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label>AppKey</label>--}}
+                {{--<h3></h3>--}}
+            {{--</div>--}}
         </div>
     </div>
     <div class="right">
@@ -65,25 +65,15 @@
             <li>Log</li>
         </ul>
         <div class="user-themes tab-content on">
-            @foreach($user->themes as $theme)
+        @foreach($user->themes as $theme)
                 <div class="theTheme">
-                    <div class="name">{{ $theme['name'] }} <span class="sites">5</span> <span class="key">Key:<i>{{ $theme->pivot->theme_key }}</i></span></div>
+                    <div class="name">{{ $theme['name'] }} <span class="sites">{{ $user->themeActiveWebsites->count() }}</span> <span class="key">Key:<i>{{ $theme->pivot->theme_key }}</i></span></div>
                     <ul class="sites">
-                        <li>
-                            <a href="http://sjsd.com/" target="_blank">http://sjsd.com/</a>
-                        </li>
-                        <li>
-                            <a href="http://sjsd.com/" target="_blank">http://sjsd.com/</a>
-                        </li>
-                        <li>
-                            <a href="http://sjsd.com/" target="_blank">http://sjsd.com/</a>
-                        </li>
-                        <li>
-                            <a href="http://sjsd.com/" target="_blank">http://sjsd.com/</a>
-                        </li>
-                        <li>
-                            <a href="http://sjsd.com/" target="_blank">http://sjsd.com/</a>
-                        </li>
+                        @foreach($user->themeActiveWebsites as $activeWebsite)
+                            <li>
+                                <a href="{{ $activeWebsite->pivot->website_domain  }}" target="_blank">{{ $activeWebsite->pivot->website_domain }}</a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             @endforeach
@@ -96,21 +86,6 @@
                 <li>
                     <a href="">How to config the zen panel? <span class="status closed">Closed</span><br/><time>9 Jan 2016</time> </a>
                 </li>
-                <li>
-                    <a href="">How to config the zen panel? <span class="status closed">Closed</span><br/><time>9 Jan 2016</time> </a>
-                </li>
-                <li>
-                    <a href="">How to config the zen panel? <span class="status closed">Closed</span><br/><time>9 Jan 2016</time> </a>
-                </li><li>
-                    <a href="">How to config the zen panel? <span class="status closed">Closed</span><br/><time>9 Jan 2016</time> </a>
-                </li><li>
-                    <a href="">How to config the zen panel? <span class="status closed">Closed</span><br/><time>9 Jan 2016</time> </a>
-                </li>
-                <li>
-                    <a href="">How to config the zen panel? <span class="status closed">Closed</span><br/><time>9 Jan 2016</time> </a>
-                </li>
-
-
             </ul>
         </div>
         <div class="user-payment tab-content">
@@ -127,69 +102,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Basic<span>Themename</span></td>
-                    <td>contact@baohan.me<span>Paypal</span></td>
-                    <td>98734972389473</td>
-                    <td>08 Feb 2015</td>
-                    <td>+$45.00</td>
-                    <td>Success</td>
-                    <td><a href="">Refund</a> </td>
-                </tr>
-                <tr>
-                    <td>Basic<span>Themename</span></td>
-                    <td>contact@baohan.me<span>Paypal</span></td>
-                    <td>98734972389473</td>
-                    <td>08 Feb 2015</td>
-                    <td>+$45.00</td>
-                    <td>Error</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Pro<span>Membership</span></td>
-                    <td>contact@baohan.me<span>Paypal</span></td>
-                    <td>98734972389473</td>
-                    <td>08 Feb 2016</td>
-                    <td>+$75.00</td>
-                    <td>Success</td>
-                    <td><a href="">Refund</a> </td>
-                </tr>
-                <tr>
-                    <td>Pro<span>Upgrade</span></td>
-                    <td>contact@baohan.me<span>Paypal</span></td>
-                    <td>98734972389473</td>
-                    <td>08 Feb 2016</td>
-                    <td>+$75.00</td>
-                    <td>Success</td>
-                    <td><a href="">Refund</a> </td>
-                </tr>
-                <tr>
-                    <td>Pro<span>Renew</span></td>
-                    <td>contact@baohan.me<span>Paypal</span></td>
-                    <td>98734972389473</td>
-                    <td>08 Feb 2016</td>
-                    <td>+$75.00</td>
-                    <td>Success</td>
-                    <td><a href="">Refund</a> </td>
-                </tr>
-                <tr>
-                    <td>Pro<span>Membership</span></td>
-                    <td>contact@baohan.me<span>Paypal</span></td>
-                    <td>98734972389473</td>
-                    <td>08 Feb 2016</td>
-                    <td>-$75.00</td>
-                    <td>Refunded</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Lifetime<span>Membership</span></td>
-                    <td>contact@baohan.me<span>Paypal</span></td>
-                    <td>98734972389473</td>
-                    <td>08 Feb 2016</td>
-                    <td>+$259.00</td>
-                    <td>Success</td>
-                    <td><a href="">Refund</a> </td>
-                </tr>
+                @foreach($user->orders as $order)
+                    <tr>
+                        <td>{{ $order->user['membership'] }}<span>Themename</span></td>
+                        <td>{{ $order->user['email'] }}<span>{{ $order['payment_type'] }}</span></td>
+                        <td>{{ $order['order_no'] }}</td>
+                        <td>{{ $order['created_at'] }}</td>
+                        <td>{{ $order['paid_amount'] }}</td>
+                        <td>{{ $order['status'] }}</td>
+                        <td><a href="">Refund</a> </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>
