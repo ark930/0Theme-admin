@@ -66,17 +66,18 @@
         </ul>
         <div class="user-themes tab-content on">
         @foreach($user->themes as $theme)
-                <div class="theTheme">
-                    <div class="name">{{ $theme['name'] }} <span class="sites">{{ $user->themeActiveWebsites->count() }}</span> <span class="key">Key:<i>{{ $theme->pivot->theme_key }}</i></span></div>
-                    <ul class="sites">
-                        @foreach($user->themeActiveWebsites as $activeWebsite)
-                            <li>
-                                <a href="{{ $activeWebsite->pivot->website_domain  }}" target="_blank">{{ $activeWebsite->pivot->website_domain }}</a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endforeach
+            <?php $activeWebsites = $user->activeWebsites($theme['id']) ?>
+            <div class="theTheme">
+                <div class="name">{{ $theme['name'] }} <span class="sites">{{ count($activeWebsites) }}</span> <span class="key">Key:<i>{{ $theme->pivot->theme_key }}</i></span></div>
+                <ul class="sites">
+                    @foreach($activeWebsites as $activeWebsite)
+                        <li>
+                            <a href="{{ $activeWebsite  }}" target="_blank">{{ $activeWebsite }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endforeach
         </div>
         <div class="user-forum tab-content">
             <ul>

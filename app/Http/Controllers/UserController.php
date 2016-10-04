@@ -56,7 +56,7 @@ class UserController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
-        return $this->sendFailedLoginResponse($request);
+        return redirect()->back()->withErrors('Login fails');
     }
 
     public function logout(Request $request)
