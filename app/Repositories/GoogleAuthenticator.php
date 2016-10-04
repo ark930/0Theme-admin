@@ -9,7 +9,7 @@
  * @link http://www.phpgangsta.de/
  */
 
-namespace App\Http\Controllers;
+namespace App\Repositories;
 
 class GoogleAuthenticator
 {

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\GoogleAuthenticator;
+use App\Repositories\ReCaptcha;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -14,11 +16,12 @@ class UserController extends Controller
         return view('main');
     }
 
-    public function login(Request $request, GoogleAuthenticator $googleAuthenticator)
+    public function login(Request $request, GoogleAuthenticator $googleAuthenticator, ReCaptcha $reCaptcha)
     {
         $this->validate($request, [
 //            'pwd' => 'required|regex:/^[a-zA-Z0-9]{8,}$/',
             'code' => 'required|regex:/^\d{6}$/',
+            'g-recaptcha-response' => 'required',
         ]);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -32,7 +35,12 @@ class UserController extends Controller
 
         $password = $request->input('pwd');
         $code = $request->input('code');
-        $secret = 'SY3NRGNH5XAEFNHE';
+        $recaptcha = $request->input('g-recaptcha-response');
+        $reCaptchaResponse = $reCaptcha->verify(env('RECAPTCHA_SECRET_KEY'), $recaptcha, $request->ip());
+
+        return $reCaptchaResponse;
+
+        $secret = env('GOOGLE_AUTHENTICATOR_SECRET');
         if($googleAuthenticator->verifyCode($secret, $code, 0)
 //           && $password === 'qwertyuiop'
         ) {
