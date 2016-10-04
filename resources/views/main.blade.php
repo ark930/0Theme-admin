@@ -1,5 +1,9 @@
 @extends('layout')
 
+@section('head_script')
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+@endsection
+
 @section('header')
 <header>
     <div class="logo">
@@ -14,6 +18,7 @@
         {{ csrf_field() }}
         <input type="password" placeholder="< Password />" name="pwd"/>
         <input type="password" placeholder="< Code />" name="code"/>
+        <div class="g-recaptcha" data-sitekey="6LfwXAgUAAAAACvEpJwKonzlmpIG8GeCZVbWzn00"></div>
         <button type="submit">LOGIN</button>
     </form>
 </div>

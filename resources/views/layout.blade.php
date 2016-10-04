@@ -3,6 +3,7 @@
     <title>Zero Admin</title>
     @yield('css')
     <link rel="stylesheet/less" type="text/css" href="{{ asset('lib/style.less') }}" />
+    @yield('head_script')
 </head>
 <body>
 
