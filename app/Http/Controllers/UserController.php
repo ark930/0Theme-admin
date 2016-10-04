@@ -13,7 +13,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('main');
+        return view('login');
     }
 
     public function login(Request $request, GoogleAuthenticator $googleAuthenticator, ReCaptcha $reCaptcha)
