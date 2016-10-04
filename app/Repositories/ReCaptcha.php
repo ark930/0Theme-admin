@@ -15,7 +15,13 @@ class ReCaptcha
             'remoteip' => $remoteIp,
         ]);
 
-        return $body;
+        $body = json_decode($body, true);
+
+        if(is_array($body) && isset($body['success']) && $body['success'] == true) {
+            return true;
+        }
+
+        return false;
     }
 
 }

@@ -36,20 +36,19 @@ class UserController extends Controller
         $password = $request->input('pwd');
         $code = $request->input('code');
         $recaptcha = $request->input('g-recaptcha-response');
-        $reCaptchaResponse = $reCaptcha->verify(env('RECAPTCHA_SECRET_KEY'), $recaptcha, $request->ip());
 
-        return $reCaptchaResponse;
-
-        $secret = env('GOOGLE_AUTHENTICATOR_SECRET');
-        if($googleAuthenticator->verifyCode($secret, $code, 0)
+        if($reCaptcha->verify(env('RECAPTCHA_SECRET_KEY'), $recaptcha, $request->ip()) == true) {
+            if($googleAuthenticator->verifyCode(env('GOOGLE_AUTHENTICATOR_SECRET'), $code, 0)
 //           && $password === 'qwertyuiop'
-        ) {
-            $request->session()->regenerate();
-            $this->clearLoginAttempts($request);
+            ) {
+                $request->session()->regenerate();
+                $this->clearLoginAttempts($request);
 
-            $request->session()->set('login', true);
+                $request->session()->set('login', true);
 
-            return redirect('/dashboard');
+                return redirect('/dashboard');
+            }
+
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
