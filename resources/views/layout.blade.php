@@ -16,7 +16,7 @@
 @yield('js')
 
 @if($errors->count() > 0)
-    <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script>
         $(function() {
             alert("{!! $errors->first() !!}");
