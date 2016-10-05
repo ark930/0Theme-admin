@@ -13,9 +13,12 @@
 
 //Route::get('/home', 'HomeController@index');
 
-//Route::get('/', 'UserController@index');
-//Route::post('/login', 'UserController@login');
-//Route::get('/logout', 'UserController@logout');
+Route::get('/', function () {
+    return redirect('/login');
+});
+Route::get('/login', 'Auth\LoginController@showLoginForm');
+Route::post('/login', 'Auth\LoginController@login');
+Route::post('/logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => []], function() {
     Route::get('/dashboard', 'AdminController@dashboard');
@@ -38,10 +41,3 @@ Route::group(['middleware' => []], function() {
     Route::get('/user_info', 'AdminController@userInfo');
     Route::get('/order_info', 'OrderController@orderInfo');
 });
-
-Route::get('/', function () {
-    return redirect('/login');
-});
-Route::get('/login', 'Auth\LoginController@showLoginForm');
-Route::post('/login', 'Auth\LoginController@login');
-Route::post('/logout', 'Auth\LoginController@logout');
