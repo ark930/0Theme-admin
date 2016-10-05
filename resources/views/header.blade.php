@@ -10,6 +10,13 @@
         <a href="{{ url("/settings") }}" class="{{ Request::url() == url("/settings") ? 'active' : '' }}">Settings</a>
     </div>
     <div class="menu tool">
-        <a href="{{ url('/logout') }}">Logout</a>
+        <a href="{{ url('/logout') }}"
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Logout
+        </a>
+
+        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     </div>
 </header>
