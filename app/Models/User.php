@@ -45,7 +45,7 @@ class User extends Authenticatable
     public function themes()
     {
         return $this->belongsToMany('App\Models\Theme', 'user_themes', 'user_id', 'theme_id')
-            ->withPivot('theme_key', 'activate_at', 'basic_expire_at', 'is_deactivate', 'deactivate_reason')
+            ->withPivot('is_deactivate', 'deactivate_reason')
             ->withTimestamps();
     }
 
