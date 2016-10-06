@@ -18,7 +18,7 @@ class UserRepository
     {
         $data = DB::table('users')
             ->select('membership', DB::raw('count(*) as total'))
-            ->where('registered', 1)
+            ->whereNotNull('register_at')
             ->groupBy('membership')
             ->get();
 
@@ -78,7 +78,6 @@ class UserRepository
     private function getTodayRegisteredUserCount()
     {
         return $this->user
-            ->where('registered', 1)
             ->where('register_at', '>=', Datetime::today())
             ->where('register_at', '<', Datetime::tomorrow())
             ->count();
@@ -87,7 +86,6 @@ class UserRepository
     private function getThisMonthRegisteredUserCount()
     {
         return $this->user
-            ->where('registered', 1)
             ->where('register_at', '>=', Datetime::thisMonth())
             ->where('register_at', '<', Datetime::nextMonth())
             ->count();
@@ -96,7 +94,6 @@ class UserRepository
     private function getThisYearRegisteredUserCount()
     {
         return $this->user
-            ->where('registered', 1)
             ->where('register_at', '>=', Datetime::thisYear())
             ->where('register_at', '<', Datetime::nextYear())
             ->count();
@@ -105,7 +102,7 @@ class UserRepository
     private function getTotalRegisteredUserCount()
     {
         return $this->user
-            ->where('registered', 1)
+            ->whereNotNull('register_at')
             ->count();
     }
 
