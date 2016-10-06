@@ -9,6 +9,11 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const MEMBERSHIP_FREE = 'membership_free';
+    const MEMBERSHIP_BASIC = 'membership_basic';
+    const MEMBERSHIP_PRO = 'membership_pro';
+    const MEMBERSHIP_LIFETIME = 'membership_lifetime';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -25,10 +30,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-    ];
-
-    protected $casts = [
-        'registered' => 'boolean',
     ];
 
     public function downloads()
