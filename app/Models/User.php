@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -54,6 +55,20 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Theme', 'user_theme_sites', 'user_id', 'theme_id')
                     ->withPivot('website_domain')
                     ->withTimestamps();
+    }
+
+    public function isRegistered()
+    {
+        return !empty($this['register_at']) ? true : false;
+    }
+
+    public function isFreeUser()
+    {
+        return !in_array($this['membership'], [
+            self::MEMBERSHIP_BASIC,
+            self::MEMBERSHIP_PRO,
+            self::MEMBERSHIP_LIFETIME,
+        ]);
     }
 
     public function activeWebsites($theme_id)
@@ -140,6 +155,17 @@ class User extends Authenticatable
     public function membershipTo($membership)
     {
         $this['membership'] = $membership;
+
+        if($membership == self::MEMBERSHIP_BASIC) {
+            $now = Carbon::now();
+            $this['basic_from'] = clone $now;
+            $this['basic_to'] = $now->addYear(1);
+        } else if($membership == self::MEMBERSHIP_PRO) {
+            $now = Carbon::now();
+            $this['pro_from'] = clone $now;
+            $this['pro_to'] = $now->addYear(1);
+        }
+
         $this->save();
     }
 
